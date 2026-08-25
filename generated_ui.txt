@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VoiceGuard Live Call Integrity</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-surface": "#303032",
+                      "on-primary-fixed": "#131b2e",
+                      "surface-bright": "#fcf8fa",
+                      "background": "#fcf8fa",
+                      "surface": "#fcf8fa",
+                      "surface-container": "#f0edef",
+                      "primary-fixed-dim": "#bec6e0",
+                      "primary-fixed": "#dae2fd",
+                      "on-tertiary-container": "#98805d",
+                      "secondary-fixed": "#dbe1ff",
+                      "on-tertiary": "#ffffff",
+                      "outline-variant": "#c6c6cd",
+                      "surface-variant": "#e4e2e4",
+                      "surface-container-high": "#eae7e9",
+                      "on-surface-variant": "#45464d",
+                      "surface-dim": "#dcd9db",
+                      "surface-tint": "#565e74",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#dec29a",
+                      "tertiary": "#000000",
+                      "on-tertiary-fixed-variant": "#574425",
+                      "on-secondary-container": "#fefcff",
+                      "primary-container": "#131b2e",
+                      "inverse-primary": "#bec6e0",
+                      "on-error": "#ffffff",
+                      "on-primary-container": "#7c839b",
+                      "on-primary": "#ffffff",
+                      "on-secondary-fixed": "#00174b",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "surface-container-highest": "#e4e2e4",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#271901",
+                      "secondary-container": "#316bf3",
+                      "inverse-on-surface": "#f3f0f2",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#76777d",
+                      "surface-container-low": "#f6f3f5",
+                      "secondary": "#0051d5",
+                      "primary": "#000000",
+                      "secondary-fixed-dim": "#b4c5ff",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed-variant": "#003ea8",
+                      "tertiary-fixed": "#fcdeb5",
+                      "on-background": "#1b1b1d",
+                      "tertiary-container": "#271901",
+                      "on-surface": "#1b1b1d"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "container-padding": "24px",
+                      "unit": "4px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "display": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "data-mono": [
+                              "JetBrains Mono"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-mono": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md h-screen flex overflow-hidden">
+<!-- NavigationDrawer -->
+<nav class="fixed left-0 top-0 h-full w-[240px] bg-surface-container-low dark:bg-inverse-surface border-r border-outline-variant dark:border-outline flex flex-col py-stack-lg gap-stack-sm z-20 hidden md:flex">
+<div class="px-container-padding mb-stack-md">
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Integrity Ops</h2>
+</div>
+<div class="flex flex-col gap-unit w-full px-stack-sm">
+<a class="flex items-center gap-stack-sm px-stack-md py-stack-sm rounded text-secondary dark:text-secondary-fixed-dim font-bold bg-surface-container-high dark:bg-primary-container transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">monitoring</span>
+<span class="font-label-caps text-label-caps">Live Monitor</span>
+</a>
+<a class="flex items-center gap-stack-sm px-stack-md py-stack-sm rounded text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-primary-fixed-variant transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-caps text-label-caps">Call History</span>
+</a>
+<a class="flex items-center gap-stack-sm px-stack-md py-stack-sm rounded text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-primary-fixed-variant transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">gavel</span>
+<span class="font-label-caps text-label-caps">Risk Rules</span>
+</a>
+<a class="flex items-center gap-stack-sm px-stack-md py-stack-sm rounded text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-on-primary-fixed-variant transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">settings_heart</span>
+<span class="font-label-caps text-label-caps">System Health</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col md:ml-[240px] overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-container-padding h-16 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline z-10 shrink-0">
+<div class="flex items-center gap-stack-sm text-primary dark:text-inverse-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">security</span>
+<h1 class="font-headline-lg text-headline-lg font-bold text-on-surface dark:text-on-surface-variant">VoiceGuard</h1>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="flex items-center gap-2 bg-green-50 px-3 py-1 rounded border border-green-200 text-green-700">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="font-label-caps text-label-caps">Connected</span>
+</div>
+<div class="font-data-mono text-data-mono px-3 py-1 bg-surface-container rounded border border-outline-variant">
+                    ID: VG-8821
+                </div>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<div class="flex-1 overflow-y-auto p-container-padding">
+<!-- Conditional High Risk Banner (Hidden by default, shown for example) -->
+<div class="hidden bg-error-container border border-error rounded p-stack-md mb-container-padding flex justify-between items-center">
+<div class="flex items-center gap-stack-sm text-on-error-container">
+<span class="material-symbols-outlined">warning</span>
+<div>
+<h3 class="font-headline-md text-headline-md">Potential Synthetic Voice Detected</h3>
+<p class="font-body-md text-body-md opacity-90">High confidence of AI generation in audio stream.</p>
+</div>
+</div>
+<button class="bg-error text-on-error px-4 py-2 rounded font-body-md font-bold hover:bg-red-700 transition-colors">
+                    Require Verification
+                </button>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Risk Score Card (Left Column) -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-stack-md h-full flex flex-col">
+<div class="flex justify-between items-center mb-stack-md border-b border-outline-variant pb-stack-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Synthesis Risk</h3>
+<span class="material-symbols-outlined text-outline">analytics</span>
+</div>
+<div class="flex-1 flex flex-col justify-center items-center">
+<div class="relative w-32 h-32 flex items-center justify-center">
+<!-- Minimalist circular meter (simulated with SVG) -->
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="45" stroke="#e4e2e4" stroke-width="8"></circle>
+<circle class="transition-all duration-1000 ease-out" cx="50" cy="50" fill="none" r="45" stroke="#22c55e" stroke-dasharray="282.7" stroke-dashoffset="243.1" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display text-display text-primary">14%</span>
+</div>
+</div>
+<div class="mt-stack-md bg-green-50 px-4 py-1 rounded border border-green-200 text-green-700 font-label-caps text-label-caps">
+                                Low Risk
+                            </div>
+</div>
+</div>
+<!-- Analysis Details -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-stack-md">
+<div class="flex justify-between items-center mb-stack-md border-b border-outline-variant pb-stack-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Analysis</h3>
+<span class="material-symbols-outlined text-outline">troubleshoot</span>
+</div>
+<div class="flex flex-col gap-stack-sm">
+<div class="flex justify-between border-b border-surface-container pb-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Anomaly Type</span>
+<span class="font-body-md text-body-md font-semibold text-primary">None Detected</span>
+</div>
+<div class="flex justify-between border-b border-surface-container pb-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Vocal Tract Mod</span>
+<span class="font-body-md text-body-md font-semibold text-primary">Normal</span>
+</div>
+<div class="flex justify-between border-b border-surface-container pb-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Spectral Artifacts</span>
+<span class="font-body-md text-body-md font-semibold text-primary">0.02%</span>
+</div>
+<div class="mt-stack-sm bg-blue-50 border border-blue-200 p-stack-sm rounded text-blue-800">
+<span class="font-label-caps text-label-caps block mb-1">Recommended Action</span>
+<span class="font-body-md text-body-md">Continue monitoring session normally.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Analysis Area (Right Column) -->
+<div class="lg:col-span-8 flex flex-col gap-gutter">
+<!-- Telemetry Chart -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-stack-md flex-1 min-h-[300px] flex flex-col">
+<div class="flex justify-between items-center mb-stack-md border-b border-outline-variant pb-stack-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Signal Stability History</h3>
+<div class="flex gap-2">
+<button class="px-2 py-1 text-xs border border-outline-variant rounded bg-surface hover:bg-surface-container transition-colors">1M</button>
+<button class="px-2 py-1 text-xs border border-primary rounded bg-primary text-on-primary">5M</button>
+<button class="px-2 py-1 text-xs border border-outline-variant rounded bg-surface hover:bg-surface-container transition-colors">15M</button>
+</div>
+</div>
+<div class="flex-1 relative w-full h-full">
+<!-- Placeholder for complex charting library -->
+<div class="absolute inset-0 flex items-center justify-center opacity-20" style="background-image: repeating-linear-gradient(transparent, transparent 39px, #e4e2e4 40px); background-size: 100% 40px;">
+<!-- Simulated Line Chart path -->
+<svg class="w-full h-full preserve-aspect-none" preserveaspectratio="none" viewbox="0 0 1000 100">
+<path d="M0,50 Q100,40 200,60 T400,30 T600,70 T800,20 T1000,50" fill="none" stroke="#0051d5" stroke-width="2"></path>
+<!-- Safe zone indicator -->
+<rect fill="#22c55e" fill-opacity="0.05" height="60" width="1000" x="0" y="20"></rect>
+</svg>
+</div>
+<!-- Axis labels -->
+<div class="absolute bottom-0 left-0 w-full flex justify-between font-data-mono text-xs text-outline pt-2 border-t border-outline-variant">
+<span>-5:00</span>
+<span>-4:00</span>
+<span>-3:00</span>
+<span>-2:00</span>
+<span>-1:00</span>
+<span>Now</span>
+</div>
+<div class="absolute top-0 left-0 h-full flex flex-col justify-between font-data-mono text-xs text-outline pr-2 border-r border-outline-variant pb-6">
+<span>100</span>
+<span>50</span>
+<span>0</span>
+</div>
+</div>
+</div>
+<!-- Microphone Controls -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-stack-md flex justify-between items-center">
+<div class="flex-1 mr-container-padding">
+<span class="font-label-caps text-label-caps text-on-surface-variant block mb-2">Input Level</span>
+<div class="flex gap-1 items-end h-8 w-full max-w-md">
+<!-- Simulated audio visualizer bars -->
+<div class="w-2 bg-primary-fixed h-[20%] rounded-t"></div>
+<div class="w-2 bg-primary-fixed h-[40%] rounded-t"></div>
+<div class="w-2 bg-primary-fixed h-[60%] rounded-t"></div>
+<div class="w-2 bg-primary h-[80%] rounded-t"></div>
+<div class="w-2 bg-primary-fixed h-[50%] rounded-t"></div>
+<div class="w-2 bg-primary-fixed h-[30%] rounded-t"></div>
+<div class="w-2 bg-primary-fixed h-[70%] rounded-t"></div>
+<div class="w-2 bg-primary-fixed h-[40%] rounded-t"></div>
+<div class="w-2 bg-primary-fixed h-[20%] rounded-t"></div>
+<div class="w-2 bg-surface-container h-[10%] rounded-t"></div>
+<div class="w-2 bg-surface-container h-[10%] rounded-t"></div>
+</div>
+</div>
+<div class="flex gap-stack-sm">
+<button class="h-9 px-4 rounded border border-outline-variant bg-surface text-primary hover:bg-surface-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+<span class="font-body-md font-semibold">Start</span>
+</button>
+<button class="h-9 px-4 rounded bg-primary text-on-primary hover:bg-inverse-surface transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">stop</span>
+<span class="font-body-md font-semibold">Stop Call</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
