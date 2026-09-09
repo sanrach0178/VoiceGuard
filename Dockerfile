@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 
 # Install PyTorch CPU version to keep image size small
-RUN pip install --no-cache-dir torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir torch torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
@@ -20,4 +21,4 @@ COPY voiceguard_model_v3.onnx.data .
 
 EXPOSE 8000
 
-CMD ["uvicorn", "inference_server:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD sh -c "uvicorn inference_server:app --host 0.0.0.0 --port ${PORT:-8000}"
