@@ -9,8 +9,27 @@ import onnxruntime as ort
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import uvicorn
 
-# We will import the telecom degradation from the pipeline
-from train_pipeline import apply_telecom_degradation
+# Helper for telecom degradation during inference
+def apply_telecom_degradation(waveform, orig_sr):
+    """
+    Simulates cellular codecs and quantization noise.
+    1. Downsample to 8kHz (AMR-NB/G.711)
+    2. Apply 8-bit mu-law encoding/decoding
+    3. Resample back to 16kHz
+    """
+    # 1. Downsample to 8 kHz
+    resample_to_8k = torchaudio.transforms.Resample(orig_freq=orig_sr, new_freq=8000)
+    waveform_8k = resample_to_8k(waveform)
+    
+    # 2. Mu-law encoding (8-bit quantization = 256 quantization levels)
+    mu_law_encoded = torchaudio.functional.mu_law_encoding(waveform_8k, quantization_channels=256)
+    mu_law_decoded = torchaudio.functional.mu_law_decoding(mu_law_encoded, quantization_channels=256)
+    
+    # 3. Resample back to 16 kHz
+    resample_to_16k = torchaudio.transforms.Resample(orig_freq=8000, new_freq=16000)
+    final_waveform = resample_to_16k(mu_law_decoded)
+    
+    return final_waveform, 16000
 
 app = FastAPI(title="VoiceGuard Deepfake Detection Streaming API")
 
