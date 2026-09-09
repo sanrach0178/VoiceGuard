@@ -255,6 +255,9 @@ def process_audio_buffer(audio_bytes: bytearray) -> dict:
     }
 
 
+import asyncio
+import traceback
+
 @app.websocket("/ws/stream")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
@@ -265,21 +268,40 @@ async def websocket_endpoint(websocket: WebSocket):
     
     buffer = bytearray()
     
+    # Track if a background processing thread is currently running
+    is_processing = False
+    
     try:
         while True:
             chunk = await websocket.receive_bytes()
             buffer.extend(chunk)
             
-            while len(buffer) >= WINDOW_BYTES:
-                window_data = buffer[:WINDOW_BYTES]
-                result = process_audio_buffer(window_data)
-                await websocket.send_json(result)
-                buffer = buffer[STEP_BYTES:]
+            # If we have enough audio for a window AND we aren't currently busy processing one
+            if len(buffer) >= WINDOW_BYTES and not is_processing:
+                is_processing = True
+                
+                # Grab the absolutely most recent 2 seconds of audio
+                # This guarantees zero lag, as we discard any older backlogged audio
+                window_data = buffer[-WINDOW_BYTES:]
+                
+                # Keep only the overlap required for the next step
+                buffer = buffer[-(WINDOW_BYTES - STEP_BYTES):]
+                
+                # Process the audio in a background thread so the websocket doesn't freeze
+                async def process_and_send():
+                    try:
+                        result = await asyncio.to_thread(process_audio_buffer, window_data)
+                        await websocket.send_json(result)
+                    finally:
+                        nonlocal is_processing
+                        is_processing = False
+                
+                # Fire and forget the background task
+                asyncio.create_task(process_and_send())
                 
     except WebSocketDisconnect:
         print("Client disconnected from /ws/stream", file=sys.stderr)
     except Exception as e:
-        import traceback
         traceback.print_exc(file=sys.stderr)
 
 if __name__ == "__main__":
