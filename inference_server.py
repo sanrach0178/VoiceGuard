@@ -136,42 +136,10 @@ def process_audio_buffer(audio_bytes: bytearray) -> dict:
     if ort_session:
         waveform = torch.tensor(audio_np).unsqueeze(0)
         
-        # Apply telecom degradation (matching training)
-        waveform, _ = apply_telecom_degradation(waveform, SAMPLE_RATE)
-        
-        # Force mono
-        if waveform.shape[0] > 1:
-            waveform = torch.mean(waveform, dim=0, keepdim=True)
-        
-        # Enforce exactly 32000 samples
-        target_samples = SAMPLE_RATE * 2
-        if waveform.shape[1] > target_samples:
-            waveform = waveform[:, :target_samples]
-        elif waveform.shape[1] < target_samples:
-            padding = target_samples - waveform.shape[1]
-            waveform = torch.nn.functional.pad(waveform, (0, padding))
-        
-        # Peak normalize (matching training)
-        max_val = torch.max(torch.abs(waveform))
-        if max_val > 0:
-            waveform = waveform / max_val
-        
-        # Mel spectrogram
-        mel_spec = mel_transform(waveform)
-        log_mel_spec = torchaudio.functional.amplitude_to_DB(
-            mel_spec, multiplier=10.0, amin=1e-10, db_multiplier=0.0, top_db=80.0
-        )
-        log_mel_spec = log_mel_spec.unsqueeze(0)
-        
-        # ONNX inference
-        ort_inputs = {'spectrogram': log_mel_spec.numpy()}
-        logits = ort_session.run(None, ort_inputs)[0]
-        
-        # No domain calibration - the CNN failed to generalize to room noise
-        # We will keep its output for debugging, but bypass it for the final score.
-        prob = 1.0 / (1.0 + np.exp(-logits[0][0]))
-        onnx_risk = float(prob)
-        onnx_logit = float(logits[0][0])
+        # ONNX model inference is bypassed to eliminate latency on low-CPU environments.
+        # The CNN failed to generalize to room noise, so we rely 100% on the acoustic physics heuristic below.
+        onnx_risk = 0.0
+        onnx_logit = 0.0
         
         # --- 3b. Spectral Centroid Heuristic (Physics-based) ---
         # The neural network is completely unstable in this live room environment.
